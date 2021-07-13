@@ -1,0 +1,20 @@
+USE imperative approach to start with and then subsequently edit the yaml file when need 
+and use the declarative command kubectl apply afterwards
+1.
+kubectl create ns demo
+kubectl label ns demo tier=test --dry-run=client -o yaml
+kubectl label ns demo tier=test --dry-run=client -o yaml > namespace.yaml
+kubectl apply -f namespace.yaml
+2.
+kubectl create deploy nginx-alpine --image=nginx:alpine  --replicas=3 --namespace demo
+kubectl label deploy nginx-alpine app=nginx tag=alpine --namespace demo
+error: 'app' already has a value (nginx-alpine), and --overwrite is false
+kubectl label --overwrite deploy nginx-alpine app=nginx tag=alpine --namespace demo
+kubectl label --overwrite deploy nginx-alpine app=nginx tag=alpine --namespace demo --dry-run=client -o yaml >deployment.yaml
+kubectl apply -f deployment.yaml
+3.
+kubectl expose deployment nginx-alpine --port=8111 --namespace demo --dry-run=client -o yaml > service.yaml
+kubectl apply -f .yaml
+4.
+kubectl expose deployment nginx-alpine --port=8111 --namespace demo --dry-run=client -o yaml > configmap.yaml
+kubectl apply -f configmap.yaml
